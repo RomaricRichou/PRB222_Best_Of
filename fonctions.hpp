@@ -23,16 +23,19 @@ public:
     {S0= vector<double>(3,1); sigma =vector<double>(3,0.3);};
     bestof(int N,double rr, double rhoo, double t, double k, double s, double sig):n(N),r(rr),rho(rhoo),T(t),K(k)
     {S0= vector<double>(n,s); sigma =vector<double>(n,sig);};
-    ~bestof();
+    
 
-    void Wt_esstim();
-    void forward();
-    void put();
+    void Wt_estim();
+    void St_estim();
+
+    double forward_MC_class(int nb_sim);
+    double put();
+    double call();
 
 };
 
 double LN();
-
+double mean(vector<double> v);
 
 #endif // FONCTIONS_HPP
 
