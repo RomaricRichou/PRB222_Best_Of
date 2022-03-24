@@ -1,1 +1,9 @@
+#ifndef FONCTIONS_HPP_INCLUDED
+#define FONCTIONS_HPP_INCLUDED
 
+
+
+#endif // FONCTIONS_HPP_INCLUDED
+
+
+double LN();
