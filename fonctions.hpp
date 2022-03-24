@@ -1,5 +1,5 @@
-#ifndef FONCTIONS_HPP_INCLUDED
-#define FONCTIONS_HPP_INCLUDED
+#ifndef FONCTIONS_HPP
+#define FONCTIONS_HPP
 
 #include <vector>
 
@@ -19,13 +19,21 @@ public:
     vector<double> S;
     double P;
 
-    bestof():n(3),r(0.02),rho(0.3),T(1.5),K(1){S0= vector<double>(3,1); sigma =vector<double>(3,0.3);};
-    bestof(int N,double rr, double rhoo, double t, double k, double s, double sig):n(N),r(rr),rho(rhoo),T(t),K(k){S0= vector<double>(n,s); sigma =vector<double>(n,sig);};
+    bestof():n(3),r(0.02),rho(0.3),T(1.5),K(1)
+    {S0= vector<double>(3,1); sigma =vector<double>(3,0.3);};
+    bestof(int N,double rr, double rhoo, double t, double k, double s, double sig):n(N),r(rr),rho(rhoo),T(t),K(k)
+    {S0= vector<double>(n,s); sigma =vector<double>(n,sig);};
+    ~bestof();
 
-    void fix_W_mc();
+    void Wt_esstim();
+    void forward();
+    void put();
+
 };
 
-#endif // FONCTIONS_HPP_INCLUDED
-
-
 double LN();
+
+
+#endif // FONCTIONS_HPP
+
+

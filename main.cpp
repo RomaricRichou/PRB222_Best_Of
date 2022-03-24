@@ -1,30 +1,38 @@
 #include "fonctions.hpp"
 #include <stdlib.h>
-<<<<<<< HEAD
 #include <iostream>
-#include <math.h>
-=======
-#include <stdio.h>
-#include <iostream>
->>>>>>> d8d35847701ab02ea73b29786da6646c152cec32
+#include<math.h>
 
-using namespace std;
+
+const double PI=4*atan(1);
 
 
 
-int main(){
-<<<<<<< HEAD
+double LN()
+{
+    double u=rand()/(double) RAND_MAX;
+    double v=rand()/(double) RAND_MAX;
+    return sqrt(-2*log(u))*cos(2*PI*v);
+}
 
+
+
+
+int main()
+{
+    //test fonction LN
     for ( int i = 0; i < 10; i++)
     {
-        cout<<LN()<<endl;
+        double s=LN();
+        std::cout<<s<<endl;
+    }
+
+
+    // test contructeurs
+    bestof best;
+    std::cout<<best.r<<endl;
+    std::cout<<best.sigma.at(0)<<endl;
+
+    return 0;
     }
     
-
-=======
-    bestof best;
-    cout<<best.r<<endl;
-    cout<<best.sigma.at(0)<<endl;
->>>>>>> d8d35847701ab02ea73b29786da6646c152cec32
-    return(0);
-}
