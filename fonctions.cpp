@@ -5,10 +5,9 @@
 #include "matrice.hpp"
 #include <algorithm>
 #include <time.h>
-<<<<<<< HEAD
-=======
+#include <cstring>
+#include <string.h>
 
->>>>>>> 9266cb96c3b7437956695c9c0d5bf909dc1ccf7b
 const double PI=4*atan(1);
 
 double LN()
@@ -35,19 +34,21 @@ double mean(const vector<double>& v)
 }
 
 double var(const vector<double>& v){
-    vector<double> v2(v.size());
-    for (int i = 0; i < v.size(); i++)
+    int n=v.size();
+    vector<double> v2(n);
+    for (int i = 0; i < n; i++)
     {
         v2[i]=v[i]*v[i];
     }
-    double varr=mean(v2)-mean(v)*mean(v);
+    
+    double varr=(mean(v2)-mean(v)*mean(v))*(double(n)/(n-1)); // estimateur non biaisÃ© de la variance
     return varr;
 }
 
 
 void bestof::Wt_estim()
 {
-  if (n!=3){cout<<"Erreur, bestof codé uniquement pour n=3 pour le moment!"<<endl;exit(-1);}
+  if (n!=3){cout<<"Erreur, bestof codï¿½ uniquement pour n=3 pour le moment!"<<endl;exit(-1);}
   W.resize(n);
   vector<double> gaussien(n,0.);
   for (int i = 0; i < n; i++){
@@ -70,8 +71,8 @@ void bestof::Wt_estim()
             W[i]+=A(i+1,j+1)*gaussien[j];
         }
     }
-
 }
+
 
 void bestof::St_estim()
 {
@@ -98,27 +99,25 @@ void bestof::St_estim_opp()
 
 
 
-void bestof::forward_MC_minvar(int nb_sim,bool indic) //indic = true pour call, false pour put.
+void bestof::forward_MC_minvar(int nb_sim,string type) //type de l'option put / call
 {
     vector<double> MC(nb_sim,0.);
-    for (int i = 0; i < nb_sim; i++){
+
+    int ind_type=1;
+    if (type.compare("put")==0) { ind_type=-1;}
+     
+    for (int i = 0; i < nb_sim; i++)
+    {
         Wt_estim();
         St_estim();
-        if (indic==true){
-            double price=*max_element(S.begin(),S.end());
-            MC[i]=exp(-r*T)*(price-K)/2;
-            St_estim_opp();
-            price=*max_element(S.begin(),S.end());
-            MC[i]+=exp(-r*T)*(price-K)/2;
-        }
-        else{
-            double price=*max_element(S.begin(),S.end());
-            MC[i]=exp(-r*T)*(K-price)/2;
-            St_estim_opp();
-            price=*max_element(S.begin(),S.end());
-            MC[i]+=exp(-r*T)*(K-price)/2;
-        }
+    
+        double price=*max_element(S.begin(),S.end());
+        MC[i]=ind_type*exp(-r*T)*(price-K)/2;
+        St_estim_opp();
+        price=*max_element(S.begin(),S.end());
+        MC[i]+=ind_type*exp(-r*T)*(price-K)/2;   
     }
+
     P= mean(MC);
     varr= var(MC);
     IC[0]=P*(1-(sqrt(varr)*1.645/sqrt(double(n))));
@@ -126,27 +125,31 @@ void bestof::forward_MC_minvar(int nb_sim,bool indic) //indic = true pour call, 
 
 }
 
-void bestof::forward_MC_class(int nb_sim,bool indic) //indic = true pour call, false pour put.
+void bestof::forward_MC_class(int nb_sim,string type)  //type de l'option put / call
 {
     vector<double> MC(nb_sim,0.);
-    for (int i = 0; i < nb_sim; i++){
+
+    int ind_type=1;
+    if (type.compare("put")==0)
+    { ind_type=-1;}
+
+    for (int i = 0; i < nb_sim; i++)
+    {
         Wt_estim();
         St_estim();
-        if (indic==true){
-            double price=*max_element(S.begin(),S.end());
-            MC[i]=exp(-r*T)*(price-K);
-        }
-        else{
-            double price=*max_element(S.begin(),S.end());
-            MC[i]=exp(-r*T)*(K-price);
-        }
+        
+        double price=*max_element(S.begin(),S.end());
+        MC[i]=exp(-r*T)*(price-K);
+        price=*max_element(S.begin(),S.end());
+        MC[i]=ind_type*exp(-r*T)*(K-price);
     }
+
     P= mean(MC);
     varr= var(MC);
     IC[0]=P*(1-(sqrt(varr)*1.645/sqrt(double(n))));
     IC[1]=P*(1+(sqrt(varr)*1.645/sqrt(double(n))));
-
 }
+
 
 double positiv(double x){
   double res =0;
@@ -156,28 +159,27 @@ double positiv(double x){
   return(res);
 };
 
-void bestof::option(int nb_sim,bool indic) //indic = true pour call, false pour put.
+void bestof::option(int nb_sim,string type)  //type de l'option put / call
 {
     vector<double> MC(nb_sim,0.);
-    for (int i = 0; i < nb_sim; i++){
+
+    int ind_type=1;
+    if (type.compare("put")==0)
+    { ind_type=-1;}
+
+
+    for (int i = 0; i < nb_sim; i++)
+    {
         Wt_estim();
         St_estim();
-        if (indic==true){
-            double price=*max_element(S.begin(),S.end());
-            MC[i]=exp(-r*T)*positiv(price-K)/2;
-            St_estim_opp();
-            price=*max_element(S.begin(),S.end());
-            MC[i]+=exp(-r*T)*positiv(price-K)/2;
-        }
-        else{
-            double price=*max_element(S.begin(),S.end());
-            MC[i]=exp(-r*T)*positiv(K-price)/2;
-            St_estim_opp();
-            price=*max_element(S.begin(),S.end());
-            MC[i]+=exp(-r*T)*positiv(K-price)/2;
 
-        }
+        double price=*max_element(S.begin(),S.end());
+        MC[i]=exp(-r*T)*positiv(price-K)/2;
+        St_estim_opp();
+        price=*max_element(S.begin(),S.end());
+        MC[i]+=ind_type*exp(-r*T)*positiv(price-K)/2; 
     }
+
     P= mean(MC);
     varr= var(MC);
     IC[0]=P*(1-(sqrt(varr)*1.645/sqrt(double(n))));

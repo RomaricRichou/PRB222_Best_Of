@@ -7,6 +7,7 @@
 #include <iomanip>
 #include <iostream>
 #include <cstring>
+#include <string.h>
 
 using namespace std;
 
@@ -36,10 +37,10 @@ public:
     void St_estim();
     void St_estim_opp();
 
-    void forward_MC_class(int nb_sim,bool indic);
-    void forward_MC_minvar(int nb_sim,bool indic);
+    void forward_MC_class(int nb_sim,string type);
+    void forward_MC_minvar(int nb_sim,string type);
 
-    void option(int nb_sim,bool indic);
+    void option(int nb_sim,string type);
 };
 
 double LN();

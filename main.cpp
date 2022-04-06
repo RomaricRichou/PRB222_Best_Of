@@ -2,32 +2,18 @@
 #include "matrice.hpp"
 #include <stdlib.h>
 #include <iostream>
-#include<math.h>
-<<<<<<< HEAD
+#include <math.h>
 #include <time.h>
-
-=======
-//#include "matplotlibcpp.h"
-//namespace plt = matplotlibcpp;
->>>>>>> 9266cb96c3b7437956695c9c0d5bf909dc1ccf7b
+#include <cstring>
+#include <string.h>
 
 const double PI=4*atan(1.);
-
+int nbsim=1000;
+int nbint=1;
 
 int main()
 {
-<<<<<<< HEAD
     srand(time(NULL));
-=======
-    //Initialisation
-    int nbsim= 100000;
-    int nbint=20;
-
-    srand(time(NULL));
-
-
-
->>>>>>> 9266cb96c3b7437956695c9c0d5bf909dc1ccf7b
     //test fonction LN
     cout<<"Affichage de tirages gaussiens:"<<endl;
     for ( int i = 0; i < 10; i++){
@@ -53,21 +39,21 @@ int main()
     cout<<"Affichage S:"<<best.S<<endl<<endl;
 
     //test Monte Carlo classique
-    best.forward_MC_class(nbsim,false);
+    best.forward_MC_class(nbsim,"put");
     cout<<"Affichage estimation forward:"<<endl<<best.P<<endl<<best.varr<<endl;
     cout<<"IC=["<<best.IC[0]<<","<<best.IC[1]<<"]"<<endl<<endl;
 
     //test Monte Carlo minvar
-    best.forward_MC_minvar(nbsim,false);
+    best.forward_MC_minvar(nbsim,"put");
     cout<<"Affichage estimation forward minvar:"<<endl<<best.P<<endl<<best.varr<<endl;
     cout<<"IC=["<<best.IC[0]<<","<<best.IC[1]<<"]"<<endl<<endl;
 
     //test Monte Carlo option
-    best.option(nbsim,false);
+    best.option(nbsim,"put");
     cout<<"Affichage estimation option put:"<<endl<<best.P<<endl<<best.varr<<endl;
     cout<<"IC=["<<best.IC[0]<<","<<best.IC[1]<<"]"<<endl<<endl;
 
-    best.option(nbsim,true);
+    best.option(nbsim,"call");
     cout<<"Affichage estimation option call:"<<endl<<best.P<<endl<<best.varr<<endl;
     cout<<"IC=["<<best.IC[0]<<","<<best.IC[1]<<"]"<<endl<<endl;
 
@@ -79,7 +65,7 @@ int main()
     vector<double> IC2(nbint);
     for (int i=0;i<nbint;i++){
         best=bestof(3,0.02,rho[i],1.5,1,1,0.3);
-        best.option(nbsim,false);
+        best.option(nbsim,"put");
         prices[i]=best.P;
         varr[i]=best.varr;
         IC1[i]=best.IC[0];
