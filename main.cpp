@@ -10,15 +10,9 @@
 const double PI=4*atan(1.);
 int nbsim=100000;
 int nbint=20;
-int nb_boucle=18;
+int nb_boucle=20;
 
-int main()
-{
-
-    fstream file;
-    file.open("saves.txt");
-    file<<"exemple"<<endl;
-    file.close();
+int main(){
     srand(time(NULL));
     //test fonction LN
     cout<<"Affichage de tirages gaussiens:"<<endl;
@@ -71,7 +65,7 @@ int main()
     vector<double> IC2(nbint);
     for (int i=0;i<nbint;i++){
         best=bestof(3,0.02,rho[i],1.5,1,1,0.3);
-        best.option(nbsim,"put");
+        best.forward_MC_minvar(nbsim,"call");
         prices[i]=best.P;
         varr[i]=best.varr;
         IC1[i]=best.IC[0];
