@@ -6,7 +6,7 @@
 #include <string>
 #include <iomanip>
 #include <iostream>
-#include <cstring>
+#include <cstring>s
 #include <string.h>
 
 using namespace std;

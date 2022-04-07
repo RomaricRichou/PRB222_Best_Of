@@ -94,7 +94,7 @@ int main(){
         nb_sims[i]=nb_sim;
         nb_sim=nb_sim*2;
     }
-    cout<<"Affichage prix put = f(rho)"<<endl<<prices<<endl<<endl;
+    cout<<"Affichage prix put = f(nb_sims)"<<endl<<prices<<endl<<endl;
     w_vector(nb_sims,"nb_sims.txt");
     w_vector(prices2,"prices2.txt");
     w_vector(varr2,"varr2.txt");
