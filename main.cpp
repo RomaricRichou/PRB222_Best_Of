@@ -8,11 +8,17 @@
 #include <string.h>
 
 const double PI=4*atan(1.);
-int nbsim=1000;
-int nbint=1;
+int nbsim=100000;
+int nbint=20;
+int nb_boucle=18;
 
 int main()
 {
+
+    fstream file;
+    file.open("saves.txt");
+    file<<"exemple"<<endl;
+    file.close();
     srand(time(NULL));
     //test fonction LN
     cout<<"Affichage de tirages gaussiens:"<<endl;
@@ -73,10 +79,33 @@ int main()
     }
     cout<<"Affichage prix put = f(rho)"<<endl<<prices<<endl<<endl;
     w_vector(rho,"rho.txt");
-    w_vector(varr,"var.txt");
+    w_vector(prices,"prices.txt");
+    w_vector(varr,"varr.txt");
     w_vector(IC1,"IC1.txt");
     w_vector(IC2,"IC2.txt");
 
+    vector<double> nb_sims(nb_boucle);
+    vector<double> prices2(nb_boucle);
+    vector<double> varr2(nb_boucle);
+    vector<double> IC12(nb_boucle);
+    vector<double> IC22(nb_boucle);
+    int nb_sim=10;
+    for (int i=0;i<nb_boucle;i++){
+        best=bestof(3,0.02,0.3,1.5,1,1,0.3);
+        best.forward_MC_minvar(nb_sim,"call");
+        prices2[i]=best.P;
+        varr2[i]=best.varr;
+        IC12[i]=best.IC[0];
+        IC22[i]=best.IC[1];
+        nb_sims[i]=nb_sim;
+        nb_sim=nb_sim*2;
+    }
+    cout<<"Affichage prix put = f(rho)"<<endl<<prices<<endl<<endl;
+    w_vector(nb_sims,"nb_sims.txt");
+    w_vector(prices2,"prices2.txt");
+    w_vector(varr2,"varr2.txt");
+    w_vector(IC12,"IC12.txt");
+    w_vector(IC22,"IC22.txt");
 
     return 0;
     }
