@@ -52,7 +52,7 @@ void bestof::Wt_estim()
   W.resize(n);
   vector<double> gaussien(n,0.);
   for (int i = 0; i < n; i++){
-    gaussien[i]=LN();
+    gaussien[i]=sqrt(T)*LN();
   }
   Matrice_carree A(n,0.);
   A(1,1)=1;
@@ -117,14 +117,10 @@ void bestof::forward_MC_minvar(int nb_sim,string type) //type de l'option put / 
 
     P= mean(MC);
     varr= var(MC);
-    if (P>0) {
-        IC[0]=P*(1-(sqrt(varr)*1.645/sqrt(double(nb_sim))));
-        IC[1]=P*(1+(sqrt(varr)*1.645/sqrt(double(nb_sim))));
-    }
-    else{
-        IC[0]=P*(1+(sqrt(varr)*1.645/sqrt(double(nb_sim))));
-        IC[1]=P*(1-(sqrt(varr)*1.645/sqrt(double(nb_sim))));
-    }
+
+    IC[0]=P-(sqrt(varr)*1.645/sqrt(double(nb_sim)));
+    IC[1]=P+(sqrt(varr)*1.645/sqrt(double(nb_sim)));
+  
 
 }
 
