@@ -139,7 +139,7 @@ void bestof::forward_MC_class(int nb_sim,string type)  //type de l'option put / 
         double price=*max_element(S.begin(),S.end());
         MC[i]=exp(-r*T)*(price-K);
         price=*max_element(S.begin(),S.end());
-        MC[i]=exp(-r*T)*(ind_type*(price-K));
+        MC[i]=ind_type*exp(-r*T)*(K-price);
     }
 
     P= mean(MC);
@@ -176,7 +176,7 @@ void bestof::option(int nb_sim,string type)  //type de l'option put / call
         MC[i]=exp(-r*T)*positiv(price-K)/2;
         St_estim_opp();
         price=*max_element(S.begin(),S.end());
-        MC[i]+=exp(-r*T)*positiv(ind_type*(price-K))/2;
+        MC[i]+=ind_type*exp(-r*T)*positiv(price-K)/2;
     }
 
     P= mean(MC);

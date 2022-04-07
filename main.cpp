@@ -8,7 +8,7 @@
 #include <string.h>
 
 const double PI=4*atan(1.);
-int nbsim=1000000;
+int nbsim=100000;
 int nbint=20;
 int nb_boucle=8;
 
