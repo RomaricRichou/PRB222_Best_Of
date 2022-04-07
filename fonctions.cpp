@@ -12,7 +12,7 @@ const double PI=4*atan(1);
 
 double LN()
 {
-    
+
     double u=rand()/(double) RAND_MAX;
     while (u==0){
         u=rand()/(double) RAND_MAX;
@@ -40,7 +40,7 @@ double var(const vector<double>& v){
     {
         v2[i]=v[i]*v[i];
     }
-    
+
     double varr=(mean(v2)-mean(v)*mean(v))*(double(n)/(n-1)); // estimateur non biaisé de la variance
     return varr;
 }
@@ -102,23 +102,29 @@ void bestof::forward_MC_minvar(int nb_sim,string type) //type de l'option put / 
 
     int ind_type=1;
     if (type.compare("put")==0) { ind_type=-1;}
-     
+
     for (int i = 0; i < nb_sim; i++)
     {
         Wt_estim();
         St_estim();
-    
+
         double price=*max_element(S.begin(),S.end());
         MC[i]=ind_type*exp(-r*T)*(price-K)/2;
         St_estim_opp();
         price=*max_element(S.begin(),S.end());
-        MC[i]+=ind_type*exp(-r*T)*(price-K)/2;   
+        MC[i]+=ind_type*exp(-r*T)*(price-K)/2;
     }
 
     P= mean(MC);
     varr= var(MC);
-    IC[0]=P*(1-(sqrt(varr)*1.645/sqrt(double(n))));
-    IC[1]=P*(1+(sqrt(varr)*1.645/sqrt(double(n))));
+    if (P>0) {
+        IC[0]=P*(1-(sqrt(varr)*1.645/sqrt(double(n))));
+        IC[1]=P*(1+(sqrt(varr)*1.645/sqrt(double(n))));
+    }
+    else{
+        IC[0]=P*(1+(sqrt(varr)*1.645/sqrt(double(n))));
+        IC[1]=P*(1-(sqrt(varr)*1.645/sqrt(double(n))));
+    }
 
 }
 
@@ -134,7 +140,7 @@ void bestof::forward_MC_class(int nb_sim,string type)  //type de l'option put / 
     {
         Wt_estim();
         St_estim();
-        
+
         double price=*max_element(S.begin(),S.end());
         MC[i]=exp(-r*T)*(price-K);
         price=*max_element(S.begin(),S.end());
@@ -143,8 +149,14 @@ void bestof::forward_MC_class(int nb_sim,string type)  //type de l'option put / 
 
     P= mean(MC);
     varr= var(MC);
-    IC[0]=P*(1-(sqrt(varr)*1.645/sqrt(double(n))));
-    IC[1]=P*(1+(sqrt(varr)*1.645/sqrt(double(n))));
+    if (P>0) {
+        IC[0]=P*(1-(sqrt(varr)*1.645/sqrt(double(n))));
+        IC[1]=P*(1+(sqrt(varr)*1.645/sqrt(double(n))));
+    }
+    else{
+        IC[0]=P*(1+(sqrt(varr)*1.645/sqrt(double(n))));
+        IC[1]=P*(1-(sqrt(varr)*1.645/sqrt(double(n))));
+    }
 }
 
 
@@ -174,14 +186,19 @@ void bestof::option(int nb_sim,string type)  //type de l'option put / call
         MC[i]=exp(-r*T)*positiv(price-K)/2;
         St_estim_opp();
         price=*max_element(S.begin(),S.end());
-        MC[i]+=ind_type*exp(-r*T)*positiv(price-K)/2; 
+        MC[i]+=ind_type*exp(-r*T)*positiv(price-K)/2;
     }
 
     P= mean(MC);
     varr= var(MC);
-    IC[0]=P*(1-(sqrt(varr)*1.645/sqrt(double(n))));
-    IC[1]=P*(1+(sqrt(varr)*1.645/sqrt(double(n))));
-
+    if (P>0) {
+        IC[0]=P*(1-(sqrt(varr)*1.645/sqrt(double(n))));
+        IC[1]=P*(1+(sqrt(varr)*1.645/sqrt(double(n))));
+    }
+    else{
+        IC[0]=P*(1+(sqrt(varr)*1.645/sqrt(double(n))));
+        IC[1]=P*(1-(sqrt(varr)*1.645/sqrt(double(n))));
+    }
 }
 
 vector<double> linspace(double a, double b, int c){
