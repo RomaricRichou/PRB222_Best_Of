@@ -215,7 +215,7 @@ void w_vector(const vector<double>& v,string file_name){
     remove(file_name.c_str());
     file.open(file_name);
     for (int i=0;i<v.size();i++){
-        file<<v[i]<<";";
+        file<<v[i]<<" ;";
     }
     file.close();
 }

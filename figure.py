@@ -12,11 +12,11 @@ def creer_tableau(cheminfichier, delimiter=";",N=0):
                 index_row = index_row+1
             else :
                 for i in range (len(row)):
-                    if len(tab) <= i:
-                        X = []
-                        tab.append(X)
+                    # if len(tab) <= i:
+                    #     X = []
+                    #     tab.append(X)
                     try:
-                        tab[i].append(float(row[i].replace(",",'.')))
+                        tab.append(float(row[i].replace(",",'.')))
                     except ValueError:
                         print('erreur:contenu de cellule non numérique')
                         continue
@@ -24,14 +24,17 @@ def creer_tableau(cheminfichier, delimiter=";",N=0):
 
     return tab
 
-var=creer_tableau("varr.txt",delimiter=";",N=0)
+var2=creer_tableau("varr2.txt",delimiter=";",N=0)
 rho=creer_tableau("rho.txt",delimiter=";",N=0)
-prices=creer_tableau("prices.txt",delimiter=";",N=0)
-IC1=creer_tableau("IC1.txt",delimiter=" ",N=0)
-IC2=creer_tableau("IC2.txt",delimiter=" ",N=0)
-nb_sims=creer_tableau("nb_path.txt",delimiter=" ",N=0)
-plt.plot(nb_sims,prices,'b',label='prices=f(nb_sims)')
-plt.plot(nb_sims,IC1,'r',label='IC1=f(nb_sims)')
+prices2=creer_tableau("prices2.txt",delimiter=";",N=0)
+IC1=creer_tableau("IC12.txt",delimiter=";",N=0)
+IC2=creer_tableau("IC22.txt",delimiter=";",N=0)
+nb_sims=creer_tableau("nb_sims.txt",delimiter=";",N=0)
+print("nbsims=",nb_sims)
+print("prices2=",prices2)
+
+plt.plot(nb_sims,prices2,'b',label='prices2=f(nb_sims)')
+plt.plot(nb_sims,IC1,'g',label='IC1=f(nb_sims)')
 plt.plot(nb_sims,IC2,'r',label='IC2=f(nb_sims)')
 plt.legend()
 plt.show()
