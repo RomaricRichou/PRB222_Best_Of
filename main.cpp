@@ -10,15 +10,9 @@
 const double PI=4*atan(1.);
 int nbsim=100000;
 int nbint=20;
-int nb_boucle=18;
+int nb_boucle=20;
 
-int main()
-{
-
-    fstream file;
-    file.open("saves.txt");
-    file<<"exemple"<<endl;
-    file.close();
+int main(){
     srand(time(NULL));
     //test fonction LN
     cout<<"Affichage de tirages gaussiens:"<<endl;
