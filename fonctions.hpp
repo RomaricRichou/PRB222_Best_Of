@@ -6,7 +6,7 @@
 #include <string>
 #include <iomanip>
 #include <iostream>
-#include <cstring>s
+#include <cstring>
 #include <string.h>
 
 using namespace std;
@@ -23,6 +23,7 @@ public:
     vector<double> sigma;
     vector<double> W;
     vector<double> S;
+    double err;
     double P;
     double varr;
     vector<double> IC=vector<double>(2);
