@@ -120,8 +120,7 @@ void bestof::forward_MC_minvar(int nb_sim,string type) //type de l'option put / 
 
     IC[0]=P-(sqrt(varr)*1.645/sqrt(double(nb_sim)));
     IC[1]=P+(sqrt(varr)*1.645/sqrt(double(nb_sim)));
-  
-
+    err=sqrt(varr)*1.645/sqrt(double(nb_sim))/P;
 }
 
 void bestof::forward_MC_class(int nb_sim,string type)  //type de l'option put / call
@@ -140,19 +139,14 @@ void bestof::forward_MC_class(int nb_sim,string type)  //type de l'option put / 
         double price=*max_element(S.begin(),S.end());
         MC[i]=exp(-r*T)*(price-K);
         price=*max_element(S.begin(),S.end());
-        MC[i]=ind_type*exp(-r*T)*(K-price);
+        MC[i]=exp(-r*T)*(ind_type*(price-K));
     }
 
     P= mean(MC);
     varr= var(MC);
-    if (P>0) {
-        IC[0]=P*(1-(sqrt(varr)*1.645/sqrt(double(nb_sim))));
-        IC[1]=P*(1+(sqrt(varr)*1.645/sqrt(double(nb_sim))));
-    }
-    else{
-        IC[0]=P*(1+(sqrt(varr)*1.645/sqrt(double(nb_sim))));
-        IC[1]=P*(1-(sqrt(varr)*1.645/sqrt(double(nb_sim))));
-    }
+    IC[0]=P-(sqrt(varr)*1.645/sqrt(double(nb_sim)));
+    IC[1]=P+(sqrt(varr)*1.645/sqrt(double(nb_sim)));
+    err=sqrt(varr)*1.645/sqrt(double(nb_sim))/P;
 }
 
 
@@ -182,19 +176,14 @@ void bestof::option(int nb_sim,string type)  //type de l'option put / call
         MC[i]=exp(-r*T)*positiv(price-K)/2;
         St_estim_opp();
         price=*max_element(S.begin(),S.end());
-        MC[i]+=ind_type*exp(-r*T)*positiv(price-K)/2;
+        MC[i]+=exp(-r*T)*positiv(ind_type*(price-K))/2;
     }
 
     P= mean(MC);
     varr= var(MC);
-    if (P>0) {
-        IC[0]=P*(1-(sqrt(varr)*1.645/sqrt(double(nb_sim))));
-        IC[1]=P*(1+(sqrt(varr)*1.645/sqrt(double(nb_sim))));
-    }
-    else{
-        IC[0]=P*(1+(sqrt(varr)*1.645/sqrt(double(nb_sim))));
-        IC[1]=P*(1-(sqrt(varr)*1.645/sqrt(double(nb_sim))));
-    }
+    IC[0]=P-(sqrt(varr)*1.645/sqrt(double(nb_sim)));
+    IC[1]=P+(sqrt(varr)*1.645/sqrt(double(nb_sim)));
+    err=sqrt(varr)*1.645/sqrt(double(nb_sim))/P;
 }
 
 vector<double> linspace(double a, double b, int c){

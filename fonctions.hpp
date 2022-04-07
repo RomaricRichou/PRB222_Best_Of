@@ -55,5 +55,3 @@ vector<double> linspace(double a, double b, int c);
 void w_vector(const vector<double>& v,string file_name);
 
 #endif // FONCTIONS_HPP
-
-
