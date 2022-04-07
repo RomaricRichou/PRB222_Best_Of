@@ -96,9 +96,6 @@ void bestof::St_estim_opp()
 
 
 
-
-
-
 void bestof::forward_MC_minvar(int nb_sim,string type) //type de l'option put / call
 {
     vector<double> MC(nb_sim,0.);

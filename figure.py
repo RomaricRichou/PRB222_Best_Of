@@ -2,7 +2,7 @@ import csv
 import matplotlib.pyplot as plt
 import numpy as np
 
-def show_figure(cheminfichier, delimiter=";",N=0):
+def creer_tableau(cheminfichier, delimiter=";",N=0):
     with open(cheminfichier, 'r', encoding='utf-8') as f :
         rfichier = csv.reader(f, delimiter=delimiter)
         tab=[]
@@ -24,4 +24,20 @@ def show_figure(cheminfichier, delimiter=";",N=0):
 
     return tab
 
-vect_global=sh
+var=creer_tableau("varr.txt",delimiter=";",N=0)
+rho=creer_tableau("rho.txt",delimiter=";",N=0)
+prices=creer_tableau("prices.txt",delimiter=";",N=0)
+IC1=creer_tableau("IC1.txt",delimiter=" ",N=0)
+IC2=creer_tableau("IC2.txt",delimiter=" ",N=0)
+nb_sims=creer_tableau("nb_path.txt",delimiter=" ",N=0)
+plt.plot(nb_sims,prices,'b',label='prices=f(nb_sims)')
+plt.plot(nb_sims,IC1,'r',label='IC1=f(nb_sims)')
+plt.plot(nb_sims,IC2,'r',label='IC2=f(nb_sims)')
+plt.legend()
+plt.show()
+#plt.plot(t,y,'r+',label='y=g(x)')
+# plt.legend()
+# plt.xlabel("t (s)")
+# plt.ylabel("x(m) et y(m)")
+# plt.grid()
+# plt.title("Evolution des coordonnées au cours d'un mouvement parabolique")
