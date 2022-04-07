@@ -120,8 +120,7 @@ void bestof::forward_MC_minvar(int nb_sim,string type) //type de l'option put / 
 
     IC[0]=P-(sqrt(varr)*1.645/sqrt(double(nb_sim)));
     IC[1]=P+(sqrt(varr)*1.645/sqrt(double(nb_sim)));
-  
-
+    err=sqrt(varr)*1.645/sqrt(double(nb_sim))/P;
 }
 
 void bestof::forward_MC_class(int nb_sim,string type)  //type de l'option put / call
@@ -145,14 +144,9 @@ void bestof::forward_MC_class(int nb_sim,string type)  //type de l'option put / 
 
     P= mean(MC);
     varr= var(MC);
-    if (P>0) {
-        IC[0]=P*(1-(sqrt(varr)*1.645/sqrt(double(nb_sim))));
-        IC[1]=P*(1+(sqrt(varr)*1.645/sqrt(double(nb_sim))));
-    }
-    else{
-        IC[0]=P*(1+(sqrt(varr)*1.645/sqrt(double(nb_sim))));
-        IC[1]=P*(1-(sqrt(varr)*1.645/sqrt(double(nb_sim))));
-    }
+    IC[0]=P-(sqrt(varr)*1.645/sqrt(double(nb_sim)));
+    IC[1]=P+(sqrt(varr)*1.645/sqrt(double(nb_sim)));
+    err=sqrt(varr)*1.645/sqrt(double(nb_sim))/P;
 }
 
 
@@ -187,14 +181,9 @@ void bestof::option(int nb_sim,string type)  //type de l'option put / call
 
     P= mean(MC);
     varr= var(MC);
-    if (P>0) {
-        IC[0]=P*(1-(sqrt(varr)*1.645/sqrt(double(nb_sim))));
-        IC[1]=P*(1+(sqrt(varr)*1.645/sqrt(double(nb_sim))));
-    }
-    else{
-        IC[0]=P*(1+(sqrt(varr)*1.645/sqrt(double(nb_sim))));
-        IC[1]=P*(1-(sqrt(varr)*1.645/sqrt(double(nb_sim))));
-    }
+    IC[0]=P-(sqrt(varr)*1.645/sqrt(double(nb_sim)));
+    IC[1]=P+(sqrt(varr)*1.645/sqrt(double(nb_sim)));
+    err=sqrt(varr)*1.645/sqrt(double(nb_sim))/P;
 }
 
 vector<double> linspace(double a, double b, int c){
