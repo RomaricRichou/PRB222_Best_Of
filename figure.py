@@ -120,3 +120,5 @@ plt.plot(rho,np.log10(err5),'g',label='Erreur relative avec variable de controle
 plt.title('log Erreur relative = f(rho)')
 plt.legend()
 plt.show()
+
+#Affichage bestof put et put en fonction de S10

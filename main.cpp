@@ -202,6 +202,36 @@ int main(){
     write_vector(IC25,"IC25.txt");
     write_vector(err5,"err5.txt");
 
+    //calcul bestof put et put = f(S1_0)
+    vector<double> S10=linspace(0,2,nbint);
+    vector<double> prices6(nbint);
+    vector<double> prices7(nbint);
+
+    vector<double> err6(nbint);
+    vector<double> varr6(nbint);
+    vector<double> IC16(nbint);
+    vector<double> IC26(nbint);
+
+    best=bestof(3,0.02,0.3,1.5,1,1,0.3);
+
+    for (int i=0;i<nbint;i++){
+        best.S0[0]=S10[i];
+        best.option(nbsim,"put");
+        prices6[i]=best.P;
+        varr6[i]=best.varr;
+        IC16[i]=best.IC[0];
+        IC26[i]=best.IC[1];
+        err6[i]=best.err;
+        prices7[i]=best.put(0);
+    }
+    write_vector(prices6,"prices6.txt");
+    write_vector(varr6,"varr6.txt");
+    write_vector(IC16,"IC16.txt");
+    write_vector(IC26,"IC26.txt");
+    write_vector(err6,"err6.txt");
+    write_vector(prices7,"prices7.txt");
+    write_vector(S10,"prices6.txt");
+
     return 0;
     }
 
