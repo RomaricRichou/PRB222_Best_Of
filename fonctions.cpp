@@ -45,23 +45,63 @@ double var(const vector<double>& v){
     return varr;
 }
 
+Matrice_carree cholesky(Matrice_carree A)
+{   
+    int n=A.get_dim();
+    Matrice_carree L(n,0.);
+    for (int i = 0; i < n; i++) 
+    {
+        for (int j = 0; j <= i; j++) 
+        {
+        float sum = 0;
+        for (int k = 0; k < j; k++)
+            sum += L(i,k)*L(j,k);
+            if (i == j){
+            L(i,j) = sqrt(A(i,i) - sum);}
+            else
+                {L(i,j) = (1.0 / L(j,j) * (A(i,j) - sum));}
+        }
+    }
+    return L;
+}
+
+
 
 void bestof::Wt_estim()
 {
-  if (n!=3){cout<<"Erreur, bestof cod� uniquement pour n=3 pour le moment!"<<endl;exit(-1);}
+  
   W.resize(n);
   vector<double> gaussien(n,0.);
   for (int i = 0; i < n; i++){
     gaussien[i]=sqrt(T)*LN();
   }
-  Matrice_carree A(n,0.);
-  A(1,1)=1;
-  A(2,1)=rho;
-  A(3,1)=rho;
-  A(2,2)=sqrt(1-rho*rho);
-  A(3,2)=rho*sqrt((1-rho)/(1+rho));
-  A(2,2)=sqrt(1-2*rho*rho/(1+rho));
+//   if (n==3){
+//     // Matrice_carree A(n,0.);
+//     // A(1,1)=1;
+//     // A(2,1)=rho;
+//     // A(3,1)=rho;
+//     // A(2,2)=sqrt(1-rho*rho);
+//     // A(3,2)=rho*sqrt((1-rho)/(1+rho));
+//     // A(2,2)=sqrt(1-2*rho*rho/(1+rho));
+//   }
+//   else{
 
+    // On construit A
+
+    Matrice_carree A(n,0.);
+    for (int i=0;i<n;i++){
+        for (int j=0; j<n;j++){
+            if (i==j){
+                A(i,i)=1;
+            }
+            else{
+                A(i,j)=rho;
+            }
+        }
+    }
+    A=cholesky(A);
+  
+  
 
     // On forme W
 

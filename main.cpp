@@ -74,12 +74,12 @@ int main(){
         err[i]=best.err;
     }
     cout<<"Affichage prix put = f(rho)"<<endl<<prices<<endl<<endl;
-    w_vector(rho,"rho.txt");
-    w_vector(prices,"prices.txt");
-    w_vector(varr,"varr.txt");
-    w_vector(IC1,"IC1.txt");
-    w_vector(IC2,"IC2.txt");
-    w_vector(err,"err.txt");
+    write_vector(rho,"rho.txt");
+    write_vector(prices,"prices.txt");
+    write_vector(varr,"varr.txt");
+    write_vector(IC1,"IC1.txt");
+    write_vector(IC2,"IC2.txt");
+    write_vector(err,"err.txt");
 
     vector<double> nb_sims(nb_boucle);
     vector<double> prices2(nb_boucle);
@@ -102,12 +102,16 @@ int main(){
         err2[i]=best.err;
     }
     cout<<"Affichage prix put = f(nb_sims)"<<endl<<prices2<<endl<<endl;
-    w_vector(nb_sims,"nb_sims.txt");
-    w_vector(err2,"err2.txt");
-    w_vector(prices2,"prices2.txt");
-    w_vector(varr2,"varr2.txt");
-    w_vector(IC12,"IC12.txt");
-    w_vector(IC22,"IC22.txt");
+    write_vector(nb_sims,"nb_sims.txt");
+    write_vector(err2,"err2.txt");
+    write_vector(prices2,"prices2.txt");
+    write_vector(varr2,"varr2.txt");
+    write_vector(IC12,"IC12.txt");
+    write_vector(IC22,"IC22.txt");
+
+    //test Cholesky
+    
+
 
     return 0;
     }

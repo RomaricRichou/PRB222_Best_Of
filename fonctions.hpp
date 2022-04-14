@@ -53,5 +53,6 @@ double positiv(double x);
 vector<double> linspace(double a, double b, int c);
 
 void write_vector(const vector<double>& v,string file_name);
+Matrice_carree cholesky(Matrice_carree M);
 
 #endif // FONCTIONS_HPP
