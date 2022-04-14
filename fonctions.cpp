@@ -23,13 +23,13 @@ double LN()
 
 double mean(const vector<double>& v)
 {
-    long double som=0.;
+    double som=0.;
     int s =v.size();
     for (int i = 0; i < v.size(); i++)
     {
-        som+=(long double)(v[i])/s;
+        som+=(long double)(v[i]);
     }
-    return som;
+    return som/s;
 
 }
 
@@ -45,21 +45,21 @@ double var(const vector<double>& v){
     return varr;
 }
 
-Matrice_carree cholesky(Matrice_carree A)
-{   
+Matrice_carree cholesky(const Matrice_carree& A)
+{
     int n=A.get_dim();
     Matrice_carree L(n,0.);
-    for (int i = 0; i < n; i++) 
+    for (int i = 0; i < n; i++)
     {
-        for (int j = 0; j <= i; j++) 
+        for (int j = 0; j <= i; j++)
         {
         float sum = 0;
         for (int k = 0; k < j; k++)
-            sum += L(i,k)*L(j,k);
+            sum += L(i+1,k+1)*L(j+1,k+1);
             if (i == j){
-            L(i,j) = sqrt(A(i,i) - sum);}
+            L(i+1,j+1) = sqrt(A(i+1,i+1) - sum);}
             else
-                {L(i,j) = (1.0 / L(j,j) * (A(i,j) - sum));}
+                {L(i+1,j+1) = (1.0 / L(j+1,j+1) * (A(i+1,j+1) - sum));}
         }
     }
     return L;
@@ -69,48 +69,32 @@ Matrice_carree cholesky(Matrice_carree A)
 
 void bestof::Wt_estim()
 {
-  
   W.resize(n);
   vector<double> gaussien(n,0.);
   for (int i = 0; i < n; i++){
     gaussien[i]=sqrt(T)*LN();
   }
-//   if (n==3){
-//     // Matrice_carree A(n,0.);
-//     // A(1,1)=1;
-//     // A(2,1)=rho;
-//     // A(3,1)=rho;
-//     // A(2,2)=sqrt(1-rho*rho);
-//     // A(3,2)=rho*sqrt((1-rho)/(1+rho));
-//     // A(2,2)=sqrt(1-2*rho*rho/(1+rho));
-//   }
-//   else{
+  Matrice_carree A(n,0.);
+  for (int i=0;i<n;i++){
+      for (int j=0; j<n;j++){
+          if (i==j){
+              A(i+1,i+1)=1;
+          }
+          else{
+              A(i+1,j+1)=rho;
+          }
+      }
+  }
+  A=cholesky(A);
 
-    // On construit A
+  // On forme W
 
-    Matrice_carree A(n,0.);
-    for (int i=0;i<n;i++){
-        for (int j=0; j<n;j++){
-            if (i==j){
-                A(i,i)=1;
-            }
-            else{
-                A(i,j)=rho;
-            }
-        }
-    }
-    A=cholesky(A);
-  
-  
-
-    // On forme W
-
-    for (int i = 0; i < n; i++){
-        W[i]=0;
-        for ( int j = 0; j < n; j++){
-            W[i]+=A(i+1,j+1)*gaussien[j];
-        }
-    }
+  for (int i = 0; i < n; i++){
+      W[i]=0;
+      for ( int j = 0; j < n; j++){
+        W[i]+=A(i+1,j+1)*gaussien[j];
+      }
+  }
 }
 
 
@@ -160,7 +144,7 @@ void bestof::forward_MC_minvar(int nb_sim,string type) //type de l'option put / 
 
     IC[0]=P-(sqrt(varr)*1.645/sqrt(double(nb_sim)));
     IC[1]=P+(sqrt(varr)*1.645/sqrt(double(nb_sim)));
-    err=sqrt(varr)*1.645/sqrt(double(nb_sim))/P;
+    err=sqrt(varr)*1.645/sqrt(double(nb_sim))/abs(P);
 }
 
 void bestof::forward_MC_class(int nb_sim,string type)  //type de l'option put / call
@@ -177,16 +161,16 @@ void bestof::forward_MC_class(int nb_sim,string type)  //type de l'option put / 
         St_estim();
 
         double price=*max_element(S.begin(),S.end());
-        MC[i]=exp(-r*T)*(price-K);
+        MC[i]=ind_type*exp(-r*T)*(price-K);
         price=*max_element(S.begin(),S.end());
-        MC[i]=ind_type*exp(-r*T)*(K-price);
+        MC[i]=ind_type*exp(-r*T)*(price-K);
     }
 
     P= mean(MC);
     varr= var(MC);
     IC[0]=P-(sqrt(varr)*1.645/sqrt(double(nb_sim)));
     IC[1]=P+(sqrt(varr)*1.645/sqrt(double(nb_sim)));
-    err=sqrt(varr)*1.645/sqrt(double(nb_sim))/P;
+    err=sqrt(varr)*1.645/sqrt(double(nb_sim))/abs(P);
 }
 
 
@@ -213,17 +197,17 @@ void bestof::option(int nb_sim,string type)  //type de l'option put / call
         St_estim();
 
         double price=*max_element(S.begin(),S.end());
-        MC[i]=exp(-r*T)*positiv(price-K)/2;
+        MC[i]=exp(-r*T)*positiv(ind_type*(price-K))/2;
         St_estim_opp();
         price=*max_element(S.begin(),S.end());
-        MC[i]+=ind_type*exp(-r*T)*positiv(price-K)/2;
+        MC[i]+=exp(-r*T)*positiv(ind_type*(price-K))/2;
     }
 
     P= mean(MC);
     varr= var(MC);
     IC[0]=P-(sqrt(varr)*1.645/sqrt(double(nb_sim)));
     IC[1]=P+(sqrt(varr)*1.645/sqrt(double(nb_sim)));
-    err=sqrt(varr)*1.645/sqrt(double(nb_sim))/P;
+    err=sqrt(varr)*1.645/sqrt(double(nb_sim))/abs(P);
 }
 
 vector<double> linspace(double a, double b, int c){
@@ -244,3 +228,5 @@ void write_vector(const vector<double>& v,string file_name){
     }
     file.close();
 }
+
+

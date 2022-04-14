@@ -1,6 +1,7 @@
 #ifndef FONCTIONS_HPP
 #define FONCTIONS_HPP
 
+#include "matrice.hpp"
 #include <vector>
 #include <fstream>
 #include <string>
@@ -32,6 +33,8 @@ public:
     {S0= vector<double>(3,1); sigma =vector<double>(3,0.3);};
     bestof(int N,double rr, double rhoo, double t, double k, double s, double sig):n(N),r(rr),rho(rhoo),T(t),K(k)
     {S0= vector<double>(n,s); sigma =vector<double>(n,sig);};
+    bestof(int N,double rr, double rhoo, double t, double k, vector<double> s, vector<double> sig):n(N),r(rr),rho(rhoo),T(t),K(k)
+    {S0= s; sigma =sig;};
 
 
     void Wt_estim();
@@ -53,6 +56,9 @@ double positiv(double x);
 vector<double> linspace(double a, double b, int c);
 
 void write_vector(const vector<double>& v,string file_name);
-Matrice_carree cholesky(Matrice_carree M);
+
+Matrice_carree cholesky(const Matrice_carree& A);
 
 #endif // FONCTIONS_HPP
+
+
