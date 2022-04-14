@@ -195,7 +195,7 @@ vector<double> linspace(double a, double b, int c){
     return line;
 }
 
-void w_vector(const vector<double>& v,string file_name){
+void write_vector(const vector<double>& v,string file_name){
     ofstream file;
     remove(file_name.c_str());
     file.open(file_name);

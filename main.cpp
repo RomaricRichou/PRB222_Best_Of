@@ -10,7 +10,7 @@
 const double PI=4*atan(1.);
 int nbsim=100000;
 int nbint=20;
-int nb_boucle=8;
+int nb_boucle=20;
 
 int main(){
     srand(time(NULL));
@@ -87,8 +87,10 @@ int main(){
     vector<double> err2(nb_boucle);
     vector<double> IC12(nb_boucle);
     vector<double> IC22(nb_boucle);
+
     int nb_sim=10000;
-    for (int i=0;i<nb_boucle;i++){
+    for (int i=0;i<nb_boucle;i++)
+    {
         best=bestof(3,0.02,0.3,1.5,1,1,0.3);
         best.forward_MC_minvar(nb_sim,"call");
         prices2[i]=best.P;
@@ -96,7 +98,7 @@ int main(){
         IC12[i]=best.IC[0];
         IC22[i]=best.IC[1];
         nb_sims[i]=nb_sim;
-        nb_sim=nb_sim*2;
+        nb_sim=int(nb_sim*1.5);
         err2[i]=best.err;
     }
     cout<<"Affichage prix put = f(nb_sims)"<<endl<<prices2<<endl<<endl;
