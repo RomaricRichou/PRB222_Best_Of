@@ -8,7 +8,7 @@
 #include <string.h>
 
 const double PI=4*atan(1.);
-int nbsim=1000000;
+int nbsim=100000;
 int nbint=20;
 int nb_boucle=8;
 int n = 5;
@@ -179,6 +179,28 @@ int main(){
     write_vector(IC24,"IC24.txt");
     write_vector(err4,"err4.txt");
     write_vector(control,"ctrl.txt");
+
+    //calcul put = f(rho) avec variable de controle
+    vector<double> prices5(nbint);
+    vector<double> err5(nbint);
+    vector<double> varr5(nbint);
+    vector<double> IC15(nbint);
+    vector<double> IC25(nbint);
+    for (int i=0;i<nbint;i++){
+        best=bestof(3,0.02,rho[i],1.5,1,1,0.3);
+        best.option_ctrl(nbsim,0,"put");
+        prices5[i]=best.P;
+        varr5[i]=best.varr;
+        IC15[i]=best.IC[0];
+        IC25[i]=best.IC[1];
+        err5[i]=best.err;
+    }
+    cout<<"Affichage prix put = f(rho) avec variable de controle"<<endl<<prices4<<endl<<endl;
+    write_vector(prices5,"prices5.txt");
+    write_vector(varr5,"varr5.txt");
+    write_vector(IC15,"IC15.txt");
+    write_vector(IC25,"IC25.txt");
+    write_vector(err5,"err5.txt");
 
     return 0;
     }
