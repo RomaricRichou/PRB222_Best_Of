@@ -223,9 +223,10 @@ void write_vector(const vector<double>& v,string file_name){
     ofstream file;
     remove(file_name.c_str());
     file.open(file_name);
-    for (int i=0;i<v.size();i++){
-        file<<v[i]<<" ;";
+    for (int i=0;i+1<v.size();i++){
+        file<<v[i]<<";";
     }
+    file<<v[v.size()-1];
     file.close();
 }
 

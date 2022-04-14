@@ -8,9 +8,9 @@
 #include <string.h>
 
 const double PI=4*atan(1.);
-int nbsim=100000;
+int nbsim=1000000;
 int nbint=20;
-int nb_boucle=7;
+int nb_boucle=8;
 int n = 5;
 
 int main(){
@@ -44,6 +44,7 @@ int main(){
     cout<<"Affichage estimation forward:"<<endl<<best.P<<endl<<best.varr<<endl;
     cout<<"Erreur relative:"<<best.err<<endl;
     cout<<"IC=["<<best.IC[0]<<","<<best.IC[1]<<"]"<<endl<<endl;
+
 
     //test Monte Carlo minvar
     best.forward_MC_minvar(nbsim,"call");
@@ -141,11 +142,15 @@ int main(){
 
 
     //calcul put = f(rho)
+    vector<double> control(nbint);
     vector<double> prices4(nbint);
     vector<double> err4(nbint);
     vector<double> varr4(nbint);
     vector<double> IC14(nbint);
     vector<double> IC24(nbint);
+    bestof ctrl=bestof(1,0.02,0,1.5,1,1,0.3);
+    ctrl.option(nbsim,"put");
+    double put=ctrl.P;
     for (int i=0;i<nbint;i++){
         best=bestof(3,0.02,rho[i],1.5,1,1,0.3);
         best.option(nbsim,"put");
@@ -154,6 +159,7 @@ int main(){
         IC14[i]=best.IC[0];
         IC24[i]=best.IC[1];
         err4[i]=best.err;
+        control[i]=put;
     }
     cout<<"Affichage prix put = f(rho)"<<endl<<prices4<<endl<<endl;
     write_vector(prices4,"prices4.txt");
@@ -161,6 +167,7 @@ int main(){
     write_vector(IC14,"IC14.txt");
     write_vector(IC24,"IC24.txt");
     write_vector(err4,"err4.txt");
+    write_vector(control,"ctrl.txt");
 
     return 0;
     }

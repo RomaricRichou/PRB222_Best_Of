@@ -19,7 +19,7 @@ def creer_tableau(cheminfichier, delimiter=";", N=0):
                     try:
                         tab.append(float(row[i].replace(",", '.')))
                     except ValueError:
-                        print('erreur:contenu de cellule non numérique')
+                        print('erreur:contenu de cellule non numérique',cheminfichier)
                         continue
 
     return tab
@@ -31,6 +31,7 @@ prices1 = creer_tableau("prices1.txt", delimiter=";", N=0)
 IC11 = creer_tableau("IC11.txt", delimiter=";", N=0)
 IC21 = creer_tableau("IC21.txt", delimiter=";", N=0)
 nb_sims = creer_tableau("nb_sims.txt", delimiter=";", N=0)
+err1 = creer_tableau("err1.txt", delimiter=";", N=0)
 print("nbsims=", nb_sims)
 print("prices1=", prices1)
 
@@ -39,6 +40,12 @@ plt.plot(np.log10(nb_sims), IC11, '--r', label='IC1=f(log(nb_sims))')
 plt.plot(np.log10(nb_sims), IC21, '--r', label='IC2=f(log(nb_sims))')
 plt.legend()
 plt.title("Futur = f(nb_sims)")
+plt.show()
+
+#Affichage Erreur relative = f(nb_sim)
+plt.plot(np.log10(nb_sims), err1, 'r', label='err=f(log(nb_sims))')
+plt.legend()
+plt.title("Erreur relative futur = f(log(nb_sims))")
 plt.show()
 
 #Affichage Futur = f(rho)
@@ -62,6 +69,7 @@ var3 = creer_tableau("varr3.txt", delimiter=";", N=0)
 prices3 = creer_tableau("prices3.txt", delimiter=";", N=0)
 IC13 = creer_tableau("IC13.txt", delimiter=";", N=0)
 IC23 = creer_tableau("IC23.txt", delimiter=";", N=0)
+err3 = creer_tableau("err3.txt", delimiter=";", N=0)
 print("nbsims=", nb_sims)
 print("prices3=", prices3)
 
@@ -72,7 +80,13 @@ plt.legend()
 plt.title("Put = f(nb_sims)")
 plt.show()
 
-#Affichage Futur = f(rho)
+#Affichage Erreur relative put = f(nb_sim)
+plt.plot(np.log10(nb_sims), err3, 'r', label='err=f(log(nb_sims))')
+plt.legend()
+plt.title("Erreur relative put = f(log(nb_sims))")
+plt.show()
+
+#Affichage Put = f(rho)
 var4 = creer_tableau("varr4.txt", delimiter=";", N=0)
 prices4 = creer_tableau("prices4.txt", delimiter=";", N=0)
 IC14 = creer_tableau("IC14.txt", delimiter=";", N=0)
