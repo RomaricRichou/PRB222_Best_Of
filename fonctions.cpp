@@ -45,8 +45,6 @@ double var(const vector<double>& v){
     return varr;
 }
 
-
-
 Matrice_carree cholesky(const Matrice_carree& A)
 {
     int n=A.get_dim();
@@ -67,6 +65,35 @@ Matrice_carree cholesky(const Matrice_carree& A)
     return L;
 }
 
+double repartition(const double& x )
+{
+    
+    double b0,b1,b2,b3,b4,b5;
+    b0=0.2316419;
+    b1=0.319381530;
+    b2=-0.356563782;
+    b3=1.781477937;
+    b4=-1.821255978;
+    b5=1.330274429;
+
+    double t=1./(1+b0*x);
+
+
+    if (x>0)
+    {
+        return 1 - (1./sqrt(2*PI))*exp(-0.5*x*x)*(b1*t+b2*t+b3*t+b4*t+b5*t);
+
+    }
+    else
+    {
+        t=1./(1-b0*x);
+        return (1./sqrt(2*PI))*exp(-0.5*x*x)*(b1*t+b2*t+b3*t+b4*t+b5*t);
+
+    }
+
+}
+
+
 void bestof::Wt_estim()
 {
   W.resize(n);
@@ -74,33 +101,18 @@ void bestof::Wt_estim()
   for (int i = 0; i < n; i++){
     gaussien[i]=sqrt(T)*LN();
   }
-//   if (n==3){
-//     // Matrice_carree A(n,0.);
-//     // A(1,1)=1;
-//     // A(2,1)=rho;
-//     // A(3,1)=rho;
-//     // A(2,2)=sqrt(1-rho*rho);
-//     // A(3,2)=rho*sqrt((1-rho)/(1+rho));
-//     // A(2,2)=sqrt(1-2*rho*rho/(1+rho));
-//   }
-//   else{
-
-    // On construit A
-
-    Matrice_carree A(n,0.);
-    for (int i=0;i<n;i++){
-        for (int j=1; j<n;j++){
-            if (i==j){
-                A(i+1,i+1)=1;
-            }
-            else{
-                A(i+1,j+1)=rho;
-            }
-        }
-    }
-    A=cholesky(A);
-  
-  
+  Matrice_carree A(n,0.);
+  for (int i=0;i<n;i++){
+      for (int j=0; j<n;j++){
+          if (i==j){
+              A(i+1,i+1)=1;
+          }
+          else{
+              A(i+1,j+1)=rho;
+          }
+      }
+  }
+  A=cholesky(A);
 
   // On forme W
 
@@ -238,10 +250,13 @@ void write_vector(const vector<double>& v,string file_name){
     ofstream file;
     remove(file_name.c_str());
     file.open(file_name);
-    for (int i=0;i<v.size();i++){
-        file<<v[i]<<" ;";
+    for (int i=0;i+1<v.size();i++){
+        file<<v[i]<<";";
     }
+    file<<v[v.size()-1];
     file.close();
 }
+
+
 
 
