@@ -33,6 +33,8 @@ public:
     {S0= vector<double>(3,1); sigma =vector<double>(3,0.3);};
     bestof(int N,double rr, double rhoo, double t, double k, double s, double sig):n(N),r(rr),rho(rhoo),T(t),K(k)
     {S0= vector<double>(n,s); sigma =vector<double>(n,sig);};
+    bestof(int N,double rr, double rhoo, double t, double k, vector<double> s, vector<double> sig):n(N),r(rr),rho(rhoo),T(t),K(k)
+    {S0= s; sigma =sig;};
 
 
     void Wt_estim();
@@ -58,3 +60,5 @@ Matrice_carree cholesky(const Matrice_carree& A);
 
 
 #endif // FONCTIONS_HPP
+
+
