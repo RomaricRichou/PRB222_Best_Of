@@ -45,27 +45,27 @@ double var(const vector<double>& v){
     return varr;
 }
 
-Matrice_carree cholesky(Matrice_carree A)
-{   
+
+
+Matrice_carree cholesky(const Matrice_carree& A)
+{
     int n=A.get_dim();
     Matrice_carree L(n,0.);
-    for (int i = 0; i < n; i++) 
+    for (int i = 0; i < n; i++)
     {
-        for (int j = 0; j <= i; j++) 
+        for (int j = 0; j <= i; j++)
         {
         float sum = 0;
         for (int k = 0; k < j; k++)
-            sum += L(i,k)*L(j,k);
+            sum += L(i+1,k+1)*L(j+1,k+1);
             if (i == j){
-            L(i,j) = sqrt(A(i,i) - sum);}
+            L(i+1,j+1) = sqrt(A(i+1,i+1) - sum);}
             else
-                {L(i,j) = (1.0 / L(j,j) * (A(i,j) - sum));}
+                {L(i+1,j+1) = (1.0 / L(j+1,j+1) * (A(i+1,j+1) - sum));}
         }
     }
     return L;
 }
-
-
 
 void bestof::Wt_estim()
 {
@@ -90,12 +90,12 @@ void bestof::Wt_estim()
 
     Matrice_carree A(n,0.);
     for (int i=0;i<n;i++){
-        for (int j=0; j<n;j++){
+        for (int j=1; j<n;j++){
             if (i==j){
-                A(i,i)=1;
+                A(i+1,i+1)=1;
             }
             else{
-                A(i,j)=rho;
+                A(i+1,j+1)=rho;
             }
         }
     }

@@ -1,6 +1,7 @@
 #ifndef FONCTIONS_HPP
 #define FONCTIONS_HPP
 
+#include "matrice.hpp"
 #include <vector>
 #include <fstream>
 #include <string>
@@ -53,6 +54,7 @@ double positiv(double x);
 vector<double> linspace(double a, double b, int c);
 
 void write_vector(const vector<double>& v,string file_name);
-Matrice_carree cholesky(Matrice_carree M);
+Matrice_carree cholesky(const Matrice_carree& A);
+
 
 #endif // FONCTIONS_HPP
