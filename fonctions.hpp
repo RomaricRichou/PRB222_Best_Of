@@ -12,6 +12,8 @@
 
 using namespace std;
 
+double repartition(double x );
+
 class bestof
 {
 public:
@@ -45,6 +47,10 @@ public:
     void forward_MC_minvar(int nb_sim,string type);
 
     void option(int nb_sim,string type);
+
+    double put(int i);
+    double call(int i);
+    void option_ctrl(int nb_sim,int indice,string type);
 };
 
 double LN();
@@ -58,7 +64,7 @@ vector<double> linspace(double a, double b, int c);
 void write_vector(const vector<double>& v,string file_name);
 
 Matrice_carree cholesky(const Matrice_carree& A);
-double densite(const double& x );
 
 #endif // FONCTIONS_HPP
+
 

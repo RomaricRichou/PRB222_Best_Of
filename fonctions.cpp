@@ -10,6 +10,35 @@
 
 const double PI=4*atan(1);
 
+double repartition(double x )
+{
+
+    double b0,b1,b2,b3,b4,b5;
+    b0=0.2316419;
+    b1=0.319381530;
+    b2=-0.356563782;
+    b3=1.781477937;
+    b4=-1.821255978;
+    b5=1.330274429;
+
+    double t=1./(1+b0*x);
+
+
+    if (x>0)
+    {
+        return 1 - (1./sqrt(2*PI))*exp(-0.5*x*x)*(b1*t+b2*pow(t,2)+b3*pow(t,3)+b4*pow(t,4)+b5*pow(t,5));
+
+    }
+    else
+    {
+        t=1./(1-b0*x);
+        return (1./sqrt(2*PI))*exp(-0.5*x*x)*(b1*t+b2*pow(t,2)+b3*pow(t,3)+b4*pow(t,4)+b5*pow(t,5));
+
+    }
+
+}
+
+
 double LN()
 {
 
@@ -65,33 +94,6 @@ Matrice_carree cholesky(const Matrice_carree& A)
     return L;
 }
 
-double repartition(const double& x )
-{
-    
-    double b0,b1,b2,b3,b4,b5;
-    b0=0.2316419;
-    b1=0.319381530;
-    b2=-0.356563782;
-    b3=1.781477937;
-    b4=-1.821255978;
-    b5=1.330274429;
-
-    double t=1./(1+b0*x);
-
-
-    if (x>0)
-    {
-        return 1 - (1./sqrt(2*PI))*exp(-0.5*x*x)*(b1*t+b2*t+b3*t+b4*t+b5*t);
-
-    }
-    else
-    {
-        t=1./(1-b0*x);
-        return (1./sqrt(2*PI))*exp(-0.5*x*x)*(b1*t+b2*t+b3*t+b4*t+b5*t);
-
-    }
-
-}
 
 
 void bestof::Wt_estim()
@@ -237,6 +239,40 @@ void bestof::option(int nb_sim,string type)  //type de l'option put / call
     err=sqrt(varr)*1.645/sqrt(double(nb_sim))/abs(P);
 }
 
+void bestof::option_ctrl(int nb_sim,int indice,string type)  //type de l'option put / call
+{
+    if (indice>=n){cout<<"Erreur i>=n option_ctrl";exit(-1);}
+    vector<double> MC(nb_sim,0.);
+
+    int ind_type=1;
+    if (type.compare("put")==0)
+    { ind_type=-1;}
+
+
+    for (int i = 0; i < nb_sim; i++)
+    {
+        Wt_estim();
+        St_estim();
+
+        double price=*max_element(S.begin(),S.end());
+        MC[i]=exp(-r*T)*(positiv(ind_type*(price-K))-positiv(ind_type*(S[indice]-K)))/2;
+        St_estim_opp();
+        price=*max_element(S.begin(),S.end());
+        MC[i]+=exp(-r*T)*(positiv(ind_type*(price-K))-positiv(ind_type*(S[indice]-K)))/2;
+    }
+
+    if (type.compare("put")==0){
+        P= mean(MC)+put(indice);
+    }
+    else{
+        P= mean(MC)+call(indice);
+    }
+    varr= var(MC);
+    IC[0]=P-(sqrt(varr)*1.645/sqrt(double(nb_sim)));
+    IC[1]=P+(sqrt(varr)*1.645/sqrt(double(nb_sim)));
+    err=sqrt(varr)*1.645/sqrt(double(nb_sim))/abs(P);
+}
+
 vector<double> linspace(double a, double b, int c){
     vector<double> line(c);
     double delta =(b-a)/(double)(c-1);
@@ -257,6 +293,18 @@ void write_vector(const vector<double>& v,string file_name){
     file.close();
 }
 
+double bestof::call(int i){
+    if (i>=n){cout<<"Erreur i>=n";exit(-1);}
+    double d1= 1/sigma[i]/sqrt(T)*(log(S0[i]/K)+(r+sigma[i]*sigma[i]/2)*T);
+    double d2= d1 - sigma[i]*sqrt(T);
+    double price = S0[i]*repartition(d1)-K*repartition(d2)*exp(-r*T);
+    return(price);
+}
 
-
-
+double bestof::put(int i){
+    if (i>=n){cout<<"Erreur i>=n";exit(-1);}
+    double d1= 1/sigma[i]/sqrt(T)*(log(S0[i]/K)+(r+sigma[i]*sigma[i]/2)*T);
+    double d2= d1 - sigma[i]*sqrt(T);
+    double price = -S0[i]*repartition(-d1)+K*repartition(-d2)*exp(-r*T);
+    return(price);
+}

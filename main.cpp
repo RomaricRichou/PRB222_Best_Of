@@ -63,6 +63,17 @@ int main(){
     cout<<"Erreur relative:"<<best.err<<endl;
     cout<<"IC=["<<best.IC[0]<<","<<best.IC[1]<<"]"<<endl<<endl;
 
+    //test Monte Carlo option variable de controle
+    best.option_ctrl(nbsim,0,"put");
+    cout<<"Affichage estimation option put avec variable de controle:"<<endl<<best.P<<endl<<best.varr<<endl;
+    cout<<"Erreur relative:"<<best.err<<endl;
+    cout<<"IC=["<<best.IC[0]<<","<<best.IC[1]<<"]"<<endl<<endl;
+
+    best.option_ctrl(nbsim,0,"call");
+    cout<<"Affichage estimation option call avec variable de controle:"<<endl<<best.P<<endl<<best.varr<<endl;
+    cout<<"Erreur relative:"<<best.err<<endl;
+    cout<<"IC=["<<best.IC[0]<<","<<best.IC[1]<<"]"<<endl<<endl;
+
     //Calcul Forward = f(nbsim)
     vector<double> nb_sims(nb_boucle);
     vector<double> prices1(nb_boucle);
@@ -171,3 +182,4 @@ int main(){
 
     return 0;
     }
+
