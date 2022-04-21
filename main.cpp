@@ -232,6 +232,48 @@ int main(){
     write_vector(prices7,"prices7.txt");
     write_vector(S10,"prices6.txt");
 
+
+    vector<double> prices_rho1(4);
+    vector<double> prices_rho2(4);
+    vector<double> prices_rho3(4);
+
+
+
+    int nbsim1=100000;
+    vector<double> N={1,3,10,25};
+    double rho1[]={0,0.5,1};
+    
+    for (int j = 0; j<4; j++)
+    {
+        best=bestof(N[j],0.02,rho1[0],1.5,1,1,0.3);
+        best.option(nbsim1,"put");
+        prices_rho1[j]=best.P;
+    }
+
+     for (int j = 0; j<4; j++)
+    {
+        
+        best=bestof(N[j],0.02,rho1[1],1.5,1,1,0.3);
+        best.option(nbsim1,"put");
+        prices_rho2[j]=best.P;
+    }
+
+     for (int j = 0; j<4; j++)
+    {
+        
+        best=bestof(N[j],0.02,rho1[2],1.5,1,1,0.3);
+        best.option(nbsim1,"put");
+        prices_rho3[j]=best.P;
+    }
+
+    write_vector(prices_rho1,"prices_rho1.txt");
+    write_vector(prices_rho2,"prices_rho2.txt");
+    write_vector(prices_rho3,"prices_rho3.txt");
+    write_vector(N,"N.txt");
+
+
+    
+
     return 0;
     }
 

@@ -122,3 +122,18 @@ plt.legend()
 plt.show()
 
 #Affichage bestof put et put en fonction de S10
+
+
+#Affichage du prix en fonction de N
+prices_rho1 = creer_tableau("prices_rho1.txt", delimiter=";", N=0)
+prices_rho2 = creer_tableau("prices_rho2.txt", delimiter=";", N=0)
+prices_rho3 = creer_tableau("prices_rho3.txt", delimiter=";", N=0)
+N = creer_tableau("N.txt", delimiter=";", N=0)
+
+plt.plot(N, prices_rho1, 'r', label='prices_rho1=f(N)')
+plt.plot(N, prices_rho2, 'g', label='prices_rho2=f(N)')
+plt.plot(N, prices_rho3, 'b', label='prices_rho3=f(N)')
+plt.legend()
+plt.show()
+
+
