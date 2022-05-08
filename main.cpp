@@ -8,9 +8,11 @@
 #include <string.h>
 
 const double PI=4*atan(1.);
-int nbsim=100000;
-int nbint=20;
-int nb_boucle=8;
+int nbsim=10000; //debut
+int nbsim_opt=500000; // Pour le forward et pour le put sur best of aussi
+
+int nbint=5;
+int nb_boucle=100; //nombre de pas
 int n = 5;
 
 int main(){
@@ -42,36 +44,36 @@ int main(){
     //test Monte Carlo classique
     best.forward_MC_class(nbsim,"call");
     cout<<"Affichage estimation forward:"<<endl<<best.P<<endl<<best.varr<<endl;
-    cout<<"Erreur relative:"<<best.err<<endl;
+    cout<<"Erreur:"<<best.err<<endl;
     cout<<"IC=["<<best.IC[0]<<","<<best.IC[1]<<"]"<<endl<<endl;
 
 
     //test Monte Carlo minvar
     best.forward_MC_minvar(nbsim,"call");
     cout<<"Affichage estimation forward minvar:"<<endl<<best.P<<endl<<best.varr<<endl;
-    cout<<"Erreur relative:"<<best.err<<endl;
+    cout<<"Erreur:"<<best.err<<endl;
     cout<<"IC=["<<best.IC[0]<<","<<best.IC[1]<<"]"<<endl<<endl;
 
     //test Monte Carlo option
     best.option(nbsim,"put");
     cout<<"Affichage estimation option put:"<<endl<<best.P<<endl<<best.varr<<endl;
-    cout<<"Erreur relative:"<<best.err<<endl;
+    cout<<"Erreur :"<<best.err<<endl;
     cout<<"IC=["<<best.IC[0]<<","<<best.IC[1]<<"]"<<endl<<endl;
 
     best.option(nbsim,"call");
     cout<<"Affichage estimation option call:"<<endl<<best.P<<endl<<best.varr<<endl;
-    cout<<"Erreur relative:"<<best.err<<endl;
+    cout<<"Erreur:"<<best.err<<endl;
     cout<<"IC=["<<best.IC[0]<<","<<best.IC[1]<<"]"<<endl<<endl;
 
     //test Monte Carlo option variable de controle
     best.option_ctrl(nbsim,0,"put");
     cout<<"Affichage estimation option put avec variable de controle:"<<endl<<best.P<<endl<<best.varr<<endl;
-    cout<<"Erreur relative:"<<best.err<<endl;
+    cout<<"Erreur :"<<best.err<<endl;
     cout<<"IC=["<<best.IC[0]<<","<<best.IC[1]<<"]"<<endl<<endl;
 
     best.option_ctrl(nbsim,0,"call");
     cout<<"Affichage estimation option call avec variable de controle:"<<endl<<best.P<<endl<<best.varr<<endl;
-    cout<<"Erreur relative:"<<best.err<<endl;
+    cout<<"Erreur:"<<best.err<<endl;
     cout<<"IC=["<<best.IC[0]<<","<<best.IC[1]<<"]"<<endl<<endl;
 
     //Calcul Forward = f(nbsim)
@@ -90,7 +92,7 @@ int main(){
         IC11[i]=best.IC[0];
         IC21[i]=best.IC[1];
         nb_sims[i]=nb_sim;
-        nb_sim=nb_sim*2;
+        nb_sim=nb_sim+10000;
         err1[i]=best.err;
     }
     cout<<"Affichage prix forward = f(nb_sims)"<<endl<<prices1<<endl<<endl;
@@ -141,7 +143,7 @@ int main(){
         IC13[i]=best.IC[0];
         IC23[i]=best.IC[1];
         nb_sims[i]=nb_sim;
-        nb_sim=nb_sim*2;
+        nb_sim=nb_sim+10000;
         err3[i]=best.err;
     }
     cout<<"Affichage prix put = f(nb_sims)"<<endl<<prices3<<endl<<endl;
@@ -160,11 +162,11 @@ int main(){
     vector<double> IC14(nbint);
     vector<double> IC24(nbint);
     bestof ctrl=bestof(1,0.02,0,1.5,1,1,0.3);
-    ctrl.option(nbsim,"put");
+    ctrl.option(nbsim_opt,"put");
     double put=ctrl.P;
     for (int i=0;i<nbint;i++){
         best=bestof(3,0.02,rho[i],1.5,1,1,0.3);
-        best.option(nbsim,"put");
+        best.option(nbsim_opt,"put");
         prices4[i]=best.P;
         varr4[i]=best.varr;
         IC14[i]=best.IC[0];
@@ -188,7 +190,7 @@ int main(){
     vector<double> IC25(nbint);
     for (int i=0;i<nbint;i++){
         best=bestof(3,0.02,rho[i],1.5,1,1,0.3);
-        best.option_ctrl(nbsim,0,"put");
+        best.option_ctrl(nbsim_opt,0,"put");
         prices5[i]=best.P;
         varr5[i]=best.varr;
         IC15[i]=best.IC[0];
@@ -200,19 +202,18 @@ int main(){
     write_vector(varr5,"varr5.txt");
     write_vector(IC15,"IC15.txt");
     write_vector(IC25,"IC25.txt");
-    write_vector(err5,"err5.txt");
+    write_vector(err5,"err5.txt"); 
 
-    //calcul bestof put et put = f(S1_0)
+//calcul bestof put et put = f(S1_0)
     vector<double> S10=linspace(0,2,nbint);
     vector<double> prices6(nbint);
     vector<double> prices7(nbint);
-
     vector<double> err6(nbint);
     vector<double> varr6(nbint);
     vector<double> IC16(nbint);
     vector<double> IC26(nbint);
 
-    best=bestof(3,0.02,0.3,1.5,1,1,0.3);
+    best=bestof(n,0.02,0.3,1.5,1,1,0.3);
 
     for (int i=0;i<nbint;i++){
         best.S0[0]=S10[i];
@@ -230,23 +231,20 @@ int main(){
     write_vector(IC26,"IC26.txt");
     write_vector(err6,"err6.txt");
     write_vector(prices7,"prices7.txt");
-    write_vector(S10,"prices6.txt");
+    write_vector(S10,"S10.txt");
 
-
+  //calcul bestof put et put = f(nombre d'actifs, rho)
     vector<double> prices_rho1(4);
     vector<double> prices_rho2(4);
     vector<double> prices_rho3(4);
-
-
-
-    int nbsim1=100000;
+    
     vector<double> N={1,3,10,25};
     double rho1[]={0,0.5,1};
     
     for (int j = 0; j<4; j++)
     {
         best=bestof(N[j],0.02,rho1[0],1.5,1,1,0.3);
-        best.option(nbsim1,"put");
+        best.option(nbsim_opt,"put");
         prices_rho1[j]=best.P;
     }
 
@@ -254,7 +252,7 @@ int main(){
     {
         
         best=bestof(N[j],0.02,rho1[1],1.5,1,1,0.3);
-        best.option(nbsim1,"put");
+        best.option(nbsim_opt,"put");
         prices_rho2[j]=best.P;
     }
 
@@ -262,7 +260,7 @@ int main(){
     {
         
         best=bestof(N[j],0.02,rho1[2],1.5,1,1,0.3);
-        best.option(nbsim1,"put");
+        best.option(nbsim_opt,"put");
         prices_rho3[j]=best.P;
     }
 
